@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101014">
+<meta name="description" content="ClipHunter — простой помощник Twitch-стримера для сбора моментов из трансляций и подготовки списка клипов.">
+<title>ClipHunter — лови лучшие моменты</title>
+<style>
+:root{--bg:#101014;--panel:#191920;--panel2:#20202a;--text:#f4f3f8;--muted:#aaa8b8;--purple:#9b72ff;--pink:#ff5ca8;--line:#30303c;--green:#7ce0b0}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 80% 0%,#322052 0,transparent 38%),var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:inherit;text-decoration:none}.wrap{width:min(1080px,calc(100% - 36px));margin:auto}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0}.brand{font-size:1.2rem;font-weight:850;letter-spacing:-.5px}.brand span{color:var(--purple)}.navlink{color:var(--muted);font-size:.92rem}
+.hero{padding:62px 0 54px;display:grid;grid-template-columns:1.05fr .95fr;gap:34px;align-items:center}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;padding:6px 11px;border:1px solid #59418a;border-radius:99px;color:#d3c3ff;background:#241b36;font-size:.8rem;font-weight:650}
+h1{font-size:clamp(2.5rem,7vw,4.8rem);line-height:.99;letter-spacing:-3px;margin:20px 0}.grad{background:linear-gradient(100deg,#b99aff,#ff80b8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);font-size:1.1rem;max-width:520px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.btn{border:0;border-radius:12px;padding:13px 18px;font-weight:750;font-size:.95rem;cursor:pointer;background:linear-gradient(110deg,var(--purple),var(--pink));color:white;display:inline-flex;align-items:center;justify-content:center}
+.btn.secondary{background:#282833;border:1px solid var(--line);color:var(--text)}.note{font-size:.8rem;color:var(--muted);margin-top:13px}
+.preview{background:linear-gradient(145deg,#24212f,#17171e);border:1px solid #40364e;border-radius:22px;padding:20px;box-shadow:0 24px 80px #0007;transform:rotate(1deg)}
+.previewtop{display:flex;justify-content:space-between;color:var(--muted);font-size:.8rem;margin-bottom:16px}.live{color:#ff8b9c}.fakebar{height:9px;background:#393544;border-radius:10px;margin:16px 0;overflow:hidden}.fakebar i{display:block;width:63%;height:100%;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:10px}
+.moment{background:#24232d;border:1px solid #373542;padding:12px;border-radius:12px;margin-top:9px;display:flex;gap:12px;align-items:center}.time{color:#c4aaff;font-weight:800;font-variant-numeric:tabular-nums}.moment small{display:block;color:var(--muted)}
+section{padding:50px 0}.sectionhead{text-align:center;margin-bottom:25px}.sectionhead h2{font-size:2rem;letter-spacing:-1px;margin:0 0 8px}.sectionhead p{color:var(--muted);margin:0}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.feature,.app{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:20px}.emoji{font-size:1.5rem}.feature h3{margin:10px 0 5px}.feature p{color:var(--muted);font-size:.92rem;margin:0}
+.app{max-width:760px;margin:0 auto;padding:22px}.app h2{margin:0 0 4px}.sub{color:var(--muted);font-size:.9rem;margin:0 0 18px}
+label{display:block;font-size:.85rem;color:#d5d2df;margin:12px 0 6px}input,textarea{width:100%;background:#111117;border:1px solid #393846;border-radius:10px;padding:12px;color:white;font:inherit;outline:none}input:focus,textarea:focus{border-color:var(--purple)}textarea{min-height:72px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.app .btn{margin-top:14px}.list{margin-top:20px}.item{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;background:#22212a;border:1px solid #363440;padding:12px;border-radius:11px;margin-top:9px}.item p{margin:4px 0 0;color:var(--muted);font-size:.9rem;overflow-wrap:anywhere}.item strong{color:#c9b5ff}.delete{border:1px solid #54404b;background:#30232b;color:#ff9bb8;border-radius:8px;padding:6px 9px;cursor:pointer}.empty{color:var(--muted);text-align:center;padding:18px;border:1px dashed #44414f;border-radius:10px;margin-top:12px}.tools{display:flex;gap:9px;flex-wrap:wrap}.tools .btn{font-size:.85rem;padding:10px 13px}
+footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:.85rem;text-align:center}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding:40px 0}.preview{transform:none}.features{grid-template-columns:1fr}.row{grid-template-columns:1fr}h1{letter-spacing:-2px}.navlink{display:none}section{padding:38px 0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav><a class="brand" href="#">✦ Clip<span>Hunter</span></a><a class="navlink" href="#tool">Попробовать инструмент ↓</a></nav>
+<header class="hero">
+<div>
+<div class="eyebrow">✦ Для Twitch-стримеров и монтажёров</div>
+<h1>Не теряй<br><span class="grad">лучшие моменты.</span></h1>
+<p class="lead">Отмечай таймкоды прямо во время просмотра VOD, добавляй заметки и собирай удобный список моментов для будущих клипов.</p>
+<div class="actions"><a class="btn" href="#tool">Попробовать бесплатно</a><a class="btn secondary" href="#how">Как это работает</a></div>
+<p class="note">Бесплатный прототип · Без регистрации · Данные хранятся в этом браузере</p>
+</div>
+<div class="preview" aria-label="Пример списка моментов">
+<div class="previewtop"><b>CLIPHUNTER / SESSION</b><span class="live">● YOUR NOTES</span></div>
+<div style="font-weight:750;font-size:1.05rem">Вечерний стрим — лучшие моменты</div><div class="fakebar"><i></i></div>
+<div class="moment"><span class="time">12:48</span><div><b>Неожиданный поворот</b><small>смешной момент · реакция чата</small></div></div>
+<div class="moment"><span class="time">38:05</span><div><b>Эпичный раунд</b><small>победа на последних секундах</small></div></div>
+<div class="moment"><span class="time">1:04:22</span><div><b>Мемный фейл</b><small>можно сделать короткий клип</small></div></div>
+</div>
+</header>
+<section id="how"><div class="sectionhead"><h2>Просто. Быстро. По делу.</h2><p>Три шага от длинной записи до списка идей для клипов.</p></div>
+<div class="features">
+<div class="feature"><div class="emoji">⏱️</div><h3>1. Отметь время</h3><p>Смотри VOD и записывай точный таймкод интересного момента.</p></div>
+<div class="feature"><div class="emoji">📝</div><h3>2. Добавь контекст</h3><p>Коротко опиши, что произошло и почему момент стоит сохранить.</p></div>
+<div class="feature"><div class="emoji">📋</div><h3>3. Передай монтажёру</h3><p>Скопируй или скачай список, чтобы ничего не искать заново.</p></div>
+</div></section>
+<section id="tool"><div class="sectionhead"><h2>Твой список моментов</h2><p>Попробуй прямо сейчас — записи сохраняются на этом устройстве.</p></div>
+<div class="app">
+<h2>Новая сессия</h2><p class="sub">Укажи стрим и добавляй моменты по мере просмотра.</p>
+<label for="stream">Название стрима или автора</label><input id="stream" placeholder="Например: Вечерний ranked с друзьями">
+<label for="vod">Ссылка на Twitch VOD (необязательно)</label><input id="vod" type="url" placeholder="https://www.twitch.tv/videos/...">
+<div class="row"><div><label for="time">Таймкод</label><input id="time" placeholder="Например, 12:48"></div><div><label for="tag">Тип момента</label><input id="tag" placeholder="Фейл, победа, реакция..."></div></div>
+<label for="note">Что произошло?</label><textarea id="note" placeholder="Короткая заметка для себя или монтажёра"></textarea>
+<button class="btn" id="add">＋ Добавить момент</button>
+<div class="list"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><b>Отмеченные моменты <span id="count" style="color:#c9b5ff">0</span></b><div class="tools"><button class="btn secondary" id="copy">Копировать</button><button class="btn secondary" id="download">Скачать .txt</button></div></div><div id="items" class="empty">Пока пусто. Добавь первый момент выше.</div></div>
+</div></section>
+<section><div class="sectionhead"><h2>Сделано для рабочего процесса</h2><p>ClipHunter помогает не забыть моменты. Сам монтаж остаётся за тобой или твоим монтажёром.</p></div></section>
+<footer>© <span id="year"></span> ClipHunter · Независимый прототип, не связан с Twitch</footer>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let moments=[];
+try{moments=JSON.parse(localStorage.getItem('cliphunter_moments')||'[]')}catch(e){moments=[]}
+function save(){localStorage.setItem('cliphunter_moments',JSON.stringify(moments));render()}
+function render(){
+ $('count').textContent=moments.length;
+ if(!moments.length){$('items').className='empty';$('items').textContent='Пока пусто. Добавь первый момент выше.';return}
+ $('items').className='list';
+ $('items').innerHTML='';
+ moments.forEach((m,i)=>{const el=document.createElement('div');el.className='item';
+ const left=document.createElement('div');const strong=document.createElement('strong');strong.textContent=m.time+' · '+(m.tag||'Момент');
+ const p=document.createElement('p');p.textContent=m.note||'Без заметки';left.append(strong,p);
+ const del=document.createElement('button');del.className='delete';del.textContent='Удалить';del.setAttribute('aria-label','Удалить момент '+(i+1));del.onclick=()=>{moments.splice(i,1);save()};
+ el.append(left,del);$('items').append(el)});
+}
+function getText(){const head='ClipHunter — список моментов\nСтрим: '+($('stream').value||'не указан')+'\nVOD: '+($('vod').value||'не указана')+'\n\n';return head+moments.map((m,i)=>(i+1)+'. '+m.time+' — '+(m.tag||'Момент')+'\n'+(m.note||'')).join('\n\n')}
+$('add').onclick=()=>{const time=$('time').value.trim();if(!time){$('time').focus();return}moments.push({time,tag:$('tag').value.trim(),note:$('note').value.trim()});$('time').value='';$('tag').value='';$('note').value='';save()};
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(getText());$('copy').textContent='Скопировано ✓';setTimeout(()=>$('copy').textContent='Копировать',1600)}catch(e){alert('Не удалось скопировать. Попробуй скачать .txt.')}}
+$('download').onclick=()=>{const blob=new Blob([getText()],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cliphunter-moments.txt';a.click();URL.revokeObjectURL(a.href)}
+$('year').textContent=new Date().getFullYear();render();
+</script>
+</body></html>
